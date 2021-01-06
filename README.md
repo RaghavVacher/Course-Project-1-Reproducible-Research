@@ -1,9 +1,9 @@
 # Course-Project-1-Reproducible-Research
 
 Course Project - 1
-1. Reading the file:
+### 1. Reading the file:
   ```x <- read.csv(choose.files(), sep = ",")```
-2. Histogram for steps each day
+### 2. Histogram for steps each day
   ```library(ggplot2)
   library(lubridate)
   x$date <- as.POSIXct(x$date, "%Y/%m/%d")
@@ -18,13 +18,13 @@ Course Project - 1
   plot
 ```
 
-3. Mean and median number of steps taken each day
+### 3. Mean and median number of steps taken each day
 
 ```   meanData <- aggregate(steps ~ date, x, mean, na.rm = T)
   medianData <- aggregate(steps ~ date, x, median) 
   ```
   
-4. Time series plot of the average number of steps taken
+### 4. Time series plot of the average number of steps taken
   ```png("Plot2.png")
   plot2 <- ggplot(meanData, aes(date, steps))
   plot2 <- plot2 + geom_line(color = "blue") + xlab("Date") + ylab("Mean Steps a Day") + ggtitle("Average Number of Steps Taken")
@@ -35,7 +35,7 @@ Course Project - 1
   plot2
 ```
 
-5. The 5-minute interval that, on average, contains the maximum number of steps
+### 5. The 5-minute interval that, on average, contains the maximum number of steps
  ``` subData <- aggregate(steps ~ date + interval, x, mean, na.rm = T)
   result <- aggregate(steps ~ interval, subData, max)
   head(result)
@@ -47,7 +47,7 @@ Course Project - 1
 ## 5       20     4
 ## 6       25    52 
 ```
-6. Code to describe and show a strategy for imputing missing data
+### 6. Code to describe and show a strategy for imputing missing data
  ``` subData <- aggregate(steps ~ date + interval, x, mean, na.rm = T)
   result <- aggregate(steps ~ interval, subData, mean)
   missingIndex<-is.na(x[,1])
@@ -62,7 +62,7 @@ Course Project - 1
 ## 5 37.3826 2012-10-01       20
 ## 6 37.3826 2012-10-01       25
 ```
-7. Histogram of the total number of steps taken each day after missing values are imputed
+### 7. Histogram of the total number of steps taken each day after missing values are imputed
   ```library(ggplot2)
   library(lubridate)
   x$date <- as.POSIXct(x$date, "%Y/%m/%d")
@@ -77,7 +77,7 @@ Course Project - 1
   plot
 ```
 
-8. Panel plot comparing the average number of steps taken per 5-minute interval across weekdays and weekends
+### 8. Panel plot comparing the average number of steps taken per 5-minute interval across weekdays and weekends
   ```x$weekday <- weekdays(x$date)
   x$weektype <- ifelse(x$weekday == "Saturday" | x$weekday == "Sunday", "Weekend", "Weekday")
   
