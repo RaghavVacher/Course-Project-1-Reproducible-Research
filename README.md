@@ -20,7 +20,8 @@ Course Project - 1
 
 ### 3. Mean and median number of steps taken each day
 
-```   meanData <- aggregate(steps ~ date, x, mean, na.rm = T)
+```   
+  meanData <- aggregate(steps ~ date, x, mean, na.rm = T)
   medianData <- aggregate(steps ~ date, x, median) 
   ```
   
