@@ -1,0 +1,91 @@
+Course Project - 1
+===================
+
+### 1. Reading the file:
+```{r, cache=TRUE}
+  x <- read.csv(choose.files(), sep = ",")
+```
+
+### 2. Histogram for steps each day
+
+```{r, cache=TRUE, warning=F}
+  library(ggplot2)
+  library(lubridate)
+  x$date <- as.POSIXct(x$date, "%Y/%m/%d")
+  aggData <- aggregate(steps ~ date, x, sum, na.rm = T)
+  png("Plot.png")
+  plot <- ggplot(data = aggData, aes(date, steps), col("blue"))
+  plot <- plot + geom_bar(stat = "identity") + xlab("Date") + ylab("Steps per Day")
+  plot
+  dev.off()
+  plot
+```  
+
+### 3. Mean and median number of steps taken each day
+
+```{r, cache= T, warning=F}
+  meanData <- aggregate(steps ~ date, x, mean, na.rm = T)
+  medianData <- aggregate(steps ~ date, x, median)
+```
+
+### 4. Time series plot of the average number of steps taken
+
+```{r, cache=T, warning=F}
+  png("Plot2.png")
+  plot2 <- ggplot(meanData, aes(date, steps))
+  plot2 <- plot2 + geom_line(color = "blue") + xlab("Date") + ylab("Mean Steps a Day") + ggtitle("Average Number of Steps Taken")
+  plot2
+  dev.off()
+  plot2
+```
+
+### 5. The 5-minute interval that, on average, contains the maximum number of steps
+
+```{r, cache=T, warning=F}
+  subData <- aggregate(steps ~ date + interval, x, mean, na.rm = T)
+  result <- aggregate(steps ~ interval, subData, max)
+  head(result)
+```
+
+### 6. Code to describe and show a strategy for imputing missing data
+
+```{r, cache = T, warning=F}
+  subData <- aggregate(steps ~ date + interval, x, mean, na.rm = T)
+  result <- aggregate(steps ~ interval, subData, mean)
+  missingIndex<-is.na(x[,1])
+  m<-mean(result$steps)
+  x[missingIndex,1]<-m
+  head(x)
+```
+
+### 7. Histogram of the total number of steps taken each day after missing values are imputed
+
+```{r, cache=TRUE, warning=F}
+  library(ggplot2)
+  library(lubridate)
+  x$date <- as.POSIXct(x$date, "%Y/%m/%d")
+  aggData <- aggregate(steps ~ date, x, sum, na.rm = T)
+  png("Plot3.png")
+  plot <- ggplot(data = aggData, aes(date, steps), col("blue"))
+  plot <- plot + geom_bar(stat = "identity") + xlab("Date") + ylab("Steps per Day")
+  plot
+  dev.off()
+  plot
+```  
+
+### 8. Panel plot comparing the average number of steps taken per 5-minute interval across weekdays and weekends
+
+```{r, cache=TRUE, warning=F}
+  x$weekday <- weekdays(x$date)
+  x$weektype <- ifelse(x$weekday == "Saturday" | x$weekday == "Sunday", "Weekend", "Weekday")
+  
+  aggDat <- aggregate(steps ~ interval + weektype, x, mean, rm.na = T)
+  aggDat$time <- aggDat$interval/100
+  png("Plot4.png")
+  plot4 <- ggplot(data = aggDat, aes(time, steps))
+  plot4 <- plot4 + geom_line() + xlab("Time") + ylab("Average Steps per 5 Minute Interval") + ggtitle("Average Steps Taken Per 5-minute Interval Across Weekdays & Weekends") + facet_grid(. ~ weektype)
+  plot4
+  dev.off()
+  plot4
+```
+  
